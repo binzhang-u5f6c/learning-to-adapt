@@ -1,3 +1,7 @@
 virtualenv
 
 __pycache__
+
+.vim
+
+*.pt

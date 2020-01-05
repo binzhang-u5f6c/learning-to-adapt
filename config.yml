@@ -1,0 +1,10 @@
+# data loading
+training_size: 10000
+batch_size: 64
+num_workers: 8
+
+# model
+
+# baselearner training
+b_epoch: 100
+b_lr: 0.01
