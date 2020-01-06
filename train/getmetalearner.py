@@ -65,10 +65,12 @@ def get_metalearner(filename):
                         if hc1[n] is None:
                             hc1[n] = (torch.randn(1, meta_input.size(0),
                                                   m_hidden_size,
-                                                  device=device),
+                                                  device=device,
+                                                  dtype=torch.float64),
                                       torch.randn(1, meta_input.size(0),
                                                   m_hidden_size,
-                                                  device=device))
+                                                  device=device,
+                                                  dtype=torch.float64))
                         if hc2[n] is None:
                             hc2[n] = (torch.randn(1, meta_input.size(0), 2,
                                                   device=device),
