@@ -33,7 +33,7 @@ def get_metalearner(filename):
     for e in range(epoch):
         for f in files:
             if f == filename:
-                break
+                continue
             dataloader, input_size, output_size = \
                 get_dataloader(f, False)
 
