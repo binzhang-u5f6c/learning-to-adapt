@@ -9,5 +9,5 @@ files = ['data/airlines.arff',
 
 
 for filename in files:
-    # get_init_baselearner(filename)
+    get_init_baselearner(filename)
     get_metalearner(filename)

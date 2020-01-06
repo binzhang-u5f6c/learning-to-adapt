@@ -46,11 +46,14 @@ def meta_adapt(filename):
             hc2 = [None for i in grad]
             for n, para in enumerate(model.parameters()):
                 meta_input = preprocess(grad[n], loss)
+                meta_input.to(device)
                 if hc1[n] is None:
                     hc1[n] = torch.randn(meta_input.size(0), 1,
                                          hidden_size)
+                    hc1[n].to(device)
                 if hc2[n] is None:
                     hc2[n] = torch.randn(meta_input.size(0), 1, 2)
+                    hc2[n].to(device)
                 meta_output, hc1[n], hc2[n] = \
                     metalearner(meta_input, hc1[n], hc2[n])
 
