@@ -20,13 +20,12 @@ with open('config.yml', 'r') as f:
     conf = safe_load(f)
 epoch = conf['m_epoch']
 lr = conf['m_lr']
-hidden_size = conf['meta_hidden_size']
+m_hidden_size = conf['meta_hidden_size']
 T = conf['T']
 
 
 def get_metalearner(filename):
-    global hidden_size
-    metalearner = MetaLearner(hidden_size)
+    metalearner = MetaLearner(m_hidden_size)
     metalearner.to(device)
     metalearner.double()
     optimizer = optim.SGD(metalearner.parameters(), lr=lr, momentum=0.9)
@@ -65,10 +64,10 @@ def get_metalearner(filename):
                         meta_input.to(device)
                         if hc1[n] is None:
                             hc1[n] = (torch.randn(meta_input.size(0), 1,
-                                                  hidden_size,
+                                                  m_hidden_size,
                                                   device=device),
                                       torch.randn(meta_input.size(0), 1,
-                                                  hidden_size,
+                                                  m_hidden_size,
                                                   device=device))
                         if hc2[n] is None:
                             hc2[n] = (torch.randn(meta_input.size(0), 1, 2,
