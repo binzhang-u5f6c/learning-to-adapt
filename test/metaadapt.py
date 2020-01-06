@@ -56,7 +56,7 @@ def meta_adapt(filename):
                                           dtype=torch.float64),
                               torch.randn(1, meta_input.size(0),
                                           meta_hidden_size,
-                                          device=device
+                                          device=device,
                                           dtype=torch.float64),)
                 if hc2[n] is None:
                     hc2[n] = (torch.randn(1, meta_input.size(0), 2,
