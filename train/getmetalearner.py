@@ -71,9 +71,9 @@ def get_metalearner(filename):
                                                   hidden_size,
                                                   device=device))
                         if hc2[n] is None:
-                            hc2[n] = (torch.randn(meta_input.size(0), 1, 2
+                            hc2[n] = (torch.randn(meta_input.size(0), 1, 2,
                                                   device=device),
-                                      torch.randn(meta_input.size(0), 1, 2
+                                      torch.randn(meta_input.size(0), 1, 2,
                                                   device=device))
                         meta_output, hc1[n], hc2[n] = \
                             metalearner(meta_input, hc1[n], hc2[n])
