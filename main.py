@@ -1,4 +1,5 @@
 from train.getinitbaselearner import get_init_baselearner
+from train.getmetalearner import get_metalearner
 
 files = ['data/airlines.arff',
          'data/covtype.arff',
@@ -8,4 +9,5 @@ files = ['data/airlines.arff',
 
 
 for filename in files:
-    get_init_baselearner(filename)
+    # get_init_baselearner(filename)
+    get_metalearner(filename)
