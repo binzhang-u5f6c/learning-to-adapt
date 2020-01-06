@@ -44,6 +44,7 @@ def get_metalearner(filename):
             model.to(device)
 
             model_cp = BaseLearner(input_size, hidden_size, output_size)
+            model_cp.double()
             model_cp.to(device)
 
             for batch_x, batch_y in dataloader:

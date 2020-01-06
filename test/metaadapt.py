@@ -23,6 +23,7 @@ def meta_adapt(filename):
     model.to(device)
 
     model_cp = BaseLearner(input_size, hidden_size, output_size)
+    model_cp.double()
     model_cp.to(device)
 
     metalearner = MetaLearner(meta_hidden_size)
