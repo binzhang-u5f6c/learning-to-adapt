@@ -16,10 +16,14 @@ def preprocess(x, loss):
     col2 = x.sign()
     col2[x.abs() < exp(-p)] = x[x.abs() < exp(-p)] * exp(p)
     if abs(loss) >= exp(-p):
-        col3 = torch.ones(x.size(), device=device) * (log(abs(loss))/p)
-        col4 = torch.ones(x.size(), device=device) * (loss/abs(loss))
+        col3 = (log(abs(loss))/p) * \
+            torch.ones(x.size(), device=device, dtype=torch.float64)
+        col4 = (loss/abs(loss)) * \
+            torch.ones(x.size(), device=device, dtype=torch.float64)
     else:
-        col3 = torch.ones(x.size(), device=device) * (-1)
-        col4 = torch.ones(x.size(), device=device) * (exp(p)*loss)
+        col3 = (-1) * \
+            torch.ones(x.size(), device=device, dtype=torch.float64)
+        col4 = (exp(p)*loss) * \
+            torch.ones(x.size(), device=device, dtype=torch.float64)
     re = torch.cat([col1, col2, col3, col4], 1)
     return re.reshape(-1, 1, 4)
