@@ -64,12 +64,17 @@ def get_metalearner(filename):
                         meta_input = preprocess(grad[n], loss)
                         meta_input.to(device)
                         if hc1[n] is None:
-                            hc1[n] = torch.randn(meta_input.size(0), 1,
-                                                 hidden_size)
-                            hc1[n].to(device)
+                            hc1[n] = (torch.randn(meta_input.size(0), 1,
+                                                  hidden_size,
+                                                  device=device),
+                                      torch.randn(meta_input.size(0), 1,
+                                                  hidden_size,
+                                                  device=device)
                         if hc2[n] is None:
-                            hc2[n] = torch.randn(meta_input.size(0), 1, 2)
-                            hc2[n].to(device)
+                            hc2[n] = (torch.randn(meta_input.size(0), 1, 2
+                                                  device=device),
+                                      torch.randn(meta_input.size(0), 1, 2
+                                                  device=device)
                         meta_output, hc1[n], hc2[n] = \
                             metalearner(meta_input, hc1[n], hc2[n])
 
