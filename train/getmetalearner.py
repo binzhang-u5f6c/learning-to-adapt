@@ -40,6 +40,7 @@ def get_metalearner(filename):
             hidden_size = int((input_size + output_size) / 2)
             model = BaseLearner(input_size, hidden_size, output_size)
             model.load_state_dict(torch.load(f[5:]+'.pt'))
+            model.double()
             model.to(device)
 
             model_cp = BaseLearner(input_size, hidden_size, output_size)
