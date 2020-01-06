@@ -91,8 +91,8 @@ def get_metalearner(filename):
                 t_loss = F.nll_loss(ybar, batch_y)
                 t_loss.backward()
                 optimizer.step()
-            with open('output.txt', 'w') as f:
-                f.write('batch test completed!')
-            exit()
+
+                print('batch test completed!')
+                exit()
 
     torch.save(metalearner.state_dict(), filename[5:]+'.meta.pt')

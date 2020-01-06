@@ -20,6 +20,7 @@ def meta_adapt(filename):
     hidden_size = int((input_size + output_size) / 2)
     model = BaseLearner(input_size, hidden_size, output_size)
     model.load_state_dict(torch.load(filename[5:]+'.pt'))
+    model.double()
     model.to(device)
 
     model_cp = BaseLearner(input_size, hidden_size, output_size)
@@ -28,6 +29,7 @@ def meta_adapt(filename):
 
     metalearner = MetaLearner(meta_hidden_size)
     metalearner.load_state_dict(torch.load(filename[5:]+'.meta.pt'))
+    metalearner.double()
     metalearner.to(device)
 
     total = 0
@@ -50,15 +52,19 @@ def meta_adapt(filename):
                 if hc1[n] is None:
                     hc1[n] = (torch.randn(1, meta_input.size(0),
                                           meta_hidden_size,
-                                          device=device),
+                                          device=device,
+                                          dtype=torch.float64),
                               torch.randn(1, meta_input.size(0),
                                           meta_hidden_size,
-                                          device=device))
+                                          device=device
+                                          dtype=torch.float64),)
                 if hc2[n] is None:
                     hc2[n] = (torch.randn(1, meta_input.size(0), 2,
-                                          device=device),
+                                          device=device,
+                                          dtype=torch.float64),
                               torch.randn(1, meta_input.size(0), 2,
-                                          device=device))
+                                          device=device,
+                                          dtype=torch.float64))
                 meta_output, hc1[n], hc2[n] = \
                     metalearner(meta_input, hc1[n], hc2[n])
 
