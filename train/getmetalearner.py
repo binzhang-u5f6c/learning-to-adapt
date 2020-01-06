@@ -36,7 +36,7 @@ def get_metalearner(filename):
             if f == filename:
                 break
             dataloader, input_size, output_size = \
-                get_dataloader(filename, False)
+                get_dataloader(f, False)
 
             hidden_size = int((input_size + output_size) / 2)
             model = BaseLearner(input_size, hidden_size, output_size)

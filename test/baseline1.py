@@ -25,6 +25,7 @@ def baseline1(filename):
             batch_y = batch_y.view(-1)
 
             ybar = model(batch_x)
+            ybar = ybar.max(1)[1]
             ybar = ybar.view(-1)
             total += batch_y.size(0)
             correct += (ybar == batch_y).sum().item()
