@@ -1,9 +1,7 @@
-from time import asctime
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
-from train.getinitbaselearner import get_init_baselearner
-from train.getmetalearner import get_metalearner
-from evaluate.baseline import baseline
-from evaluate.metaadapt import meta_adapt
+from utils.load import DatasetFoo
 
 files = ['data/airlines.arff',
          'data/covtype.arff',
@@ -11,16 +9,14 @@ files = ['data/airlines.arff',
          'data/pokerhand.arff',
          'data/sensor.arff']
 
-
-print(asctime())
 for filename in files:
-    get_init_baselearner(filename)
-for filename in files:
-    get_metalearner(filename)
-print(asctime())
-for filename in files:
-    print(filename)
-    corr, total = baseline(filename)
-    print(corr/total)
-    corr, total = meta_adapt
-    print(corr/total)
+    ds1 = DatasetFoo(filename)
+    x = ds1.x
+    y = ds1.y
+    clf = LogisticRegression()
+    clf.fit(x, y)
+    ds1 = DatasetFoo(filename, False)
+    x = ds1.x
+    y = ds1.y
+    ybar = clf.predict(x)
+    acc = accuracy_score(ybar, y)
