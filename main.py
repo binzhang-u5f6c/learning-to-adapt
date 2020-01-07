@@ -2,8 +2,8 @@ from time import asctime
 
 from train.getinitbaselearner import get_init_baselearner
 from train.getmetalearner import get_metalearner
-from test.baseline import baseline
-from test.metaadapt import meta_adapt
+from evaluate.baseline import baseline
+from evaluate.metaadapt import meta_adapt
 
 files = ['data/airlines.arff',
          'data/covtype.arff',
