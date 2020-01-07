@@ -60,5 +60,6 @@ class DatasetFoo(Dataset):
 def get_dataloader(filename, train=True):
     ds = DatasetFoo(filename, train)
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                    num_workers=num_workers, pin_memory=True)
+                    num_workers=num_workers, pin_memory=True,
+                    drop_last=True)
     return dl, ds.feature_num, ds.class_num
