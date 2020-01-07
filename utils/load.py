@@ -19,12 +19,8 @@ class DatasetFoo(Dataset):
         super(DatasetFoo).__init__()
         df = arff2pandas(filename)
 
-        if train:
-            self.x = df.iloc[:split_point, :-1]
-            self.y = df.iloc[:split_point, -1:]
-        else:
-            self.x = df.iloc[split_point:, :-1]
-            self.y = df.iloc[split_point:, -1:]
+        self.x = df.iloc[:, :-1]
+        self.y = df.iloc[:, -1:]
 
         self.x = pd.get_dummies(self.x)
         self.feature_num = len(self.x.keys())
@@ -35,6 +31,13 @@ class DatasetFoo(Dataset):
         self.class_num = len(classes)
         replace_map = {k: i for i, k in enumerate(classes)}
         self.y[cols[0]] = ybar.replace(replace_map)
+
+        if train:
+            self.x = df.iloc[:split_point, :]
+            self.y = df.iloc[:split_point, :]
+        else:
+            self.x = df.iloc[split_point:, :]
+            self.y = df.iloc[split_point:, :]
 
     def __len__(self):
         return len(self.x)
