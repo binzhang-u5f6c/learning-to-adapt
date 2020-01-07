@@ -6,7 +6,7 @@ from utils.load import get_dataloader
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def baseline1(filename):
+def baseline(filename):
     dataloader, input_size, output_size = get_dataloader(filename, False)
 
     hidden_size = int((input_size + output_size) / 2)
