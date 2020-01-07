@@ -6,11 +6,11 @@ from utils.load import get_dataloader
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def baseline(filename, batch_size, training_size):
+def baseline(filename, hidden_size, batch_size, training_size):
     dataloader, input_size, output_size = get_dataloader(filename, batch_size,
                                                          training_size, False)
 
-    model = BaseLearner(input_size, 25, output_size)
+    model = BaseLearner(input_size, hidden_size, output_size)
     model.load_state_dict(torch.load(filename[5:]+'.pt'))
     model.double()
     model.to(device)

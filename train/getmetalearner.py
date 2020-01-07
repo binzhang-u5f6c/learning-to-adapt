@@ -16,8 +16,8 @@ files = ['data/airlines.arff',
          'data/pokerhand.arff']
 
 
-def get_metalearner(filename, batch_size1, batch_size2, m_hidden_size,
-                    training_size, epoch, lr, T, p):
+def get_metalearner(filename, batch_size1, batch_size2, hidden_size,
+                    m_hidden_size, training_size, epoch, lr, T, p):
     metalearner = MetaLearner(m_hidden_size)
     metalearner.to(device)
     metalearner.double()
@@ -30,12 +30,12 @@ def get_metalearner(filename, batch_size1, batch_size2, m_hidden_size,
             dataloader, input_size, output_size = \
                 get_dataloader(f, batch_size1, training_size, False)
 
-            model = BaseLearner(input_size, 25, output_size)
+            model = BaseLearner(input_size, hidden_size, output_size)
             model.load_state_dict(torch.load(f[5:]+'.pt'))
             model.double()
             model.to(device)
 
-            model_cp = BaseLearner(input_size, 25, output_size)
+            model_cp = BaseLearner(input_size, hidden_size, output_size)
             model_cp.double()
             model_cp.to(device)
 
@@ -48,7 +48,7 @@ def get_metalearner(filename, batch_size1, batch_size2, m_hidden_size,
                 batch_y = batch_y.view(-1, batch_size2)
 
                 optimizer.zero_grad()
-                for j in range(int(batch_size1/batch_size2)-1):
+                for j in range(batch_x.size(0)-1):
                     for t in range(T):
                         model_cp.load_state_dict(model.state_dict())
                         grad, loss = get_grad(model_cp, batch_x[j], batch_y[j])

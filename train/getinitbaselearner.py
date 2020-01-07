@@ -8,12 +8,13 @@ from utils.load import get_dataloader
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def get_init_baselearner(filename, batch_size, training_size, epoch, lr):
+def get_init_baselearner(filename, hidden_size, batch_size,
+                         training_size, epoch, lr):
     dataloader, input_size, output_size = get_dataloader(filename,
                                                          batch_size,
                                                          training_size)
 
-    model = BaseLearner(input_size, 25, output_size)
+    model = BaseLearner(input_size, hidden_size, output_size)
     model.to(device)
     model.double()
     optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9)

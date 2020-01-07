@@ -9,17 +9,17 @@ from utils.preprocess import preprocess
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def meta_adapt(filename, batch_size1, batch_size2,
-               meta_hidden_size, training_size, T, p):
+def l2aee(filename, batch_size1, batch_size2, hidden_size,
+          meta_hidden_size, training_size, T, p):
     dataloader, input_size, output_size = get_dataloader(filename, batch_size1,
                                                          training_size, False)
 
-    model = BaseLearner(input_size, 25, output_size)
+    model = BaseLearner(input_size, hidden_size, output_size)
     model.load_state_dict(torch.load(filename[5:]+'.pt'))
     model.double()
     model.to(device)
 
-    model_cp = BaseLearner(input_size, 25, output_size)
+    model_cp = BaseLearner(input_size, hidden_size, output_size)
     model_cp.double()
     model_cp.to(device)
 
@@ -38,7 +38,7 @@ def meta_adapt(filename, batch_size1, batch_size2,
         batch_y = batch_y.long()
         batch_y = batch_y.view(-1, batch_size2)
 
-        for j in range(int(batch_size1/batch_size2)):
+        for j in range(batch_x.size(0)):
             ybar = model(batch_x[j])
             ybar = ybar.max(1)[1]
             ybar = ybar.view(-1)
