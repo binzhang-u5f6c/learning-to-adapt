@@ -1,4 +1,3 @@
-from yaml import safe_load
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
@@ -6,16 +5,9 @@ from torch.utils.data import DataLoader
 
 from utils.arff2pandas import arff2pandas
 
-# hyperparameters
-with open('config.yml', 'r') as f:
-    conf = safe_load(f)
-split_point = conf['training_size']
-batch_size = conf['batch_size']
-num_workers = conf['num_workers']
-
 
 class DatasetFoo(Dataset):
-    def __init__(self, filename, train=True):
+    def __init__(self, filename, training_size, train=True):
         super(DatasetFoo).__init__()
         df = arff2pandas(filename)
 
@@ -33,11 +25,11 @@ class DatasetFoo(Dataset):
         self.y[cols[0]] = ybar.replace(replace_map)
 
         if train:
-            self.x = self.x.iloc[:split_point, :]
-            self.y = self.y.iloc[:split_point, :]
+            self.x = self.x.iloc[:training_size, :]
+            self.y = self.y.iloc[:training_size, :]
         else:
-            self.x = self.x.iloc[split_point:, :]
-            self.y = self.y.iloc[split_point:, :]
+            self.x = self.x.iloc[training_size:, :]
+            self.y = self.y.iloc[training_size:, :]
 
     def __len__(self):
         return len(self.x)
@@ -57,8 +49,8 @@ class DatasetFoo(Dataset):
         return x, y
 
 
-def get_dataloader(filename, train=True):
-    ds = DatasetFoo(filename, train)
+def get_dataloader(filename, batch_size, training_size, train=True):
+    ds = DatasetFoo(filename, training_size, train)
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                    num_workers=num_workers, pin_memory=True)
+                    num_workers=8, pin_memory=True)
     return dl, ds.feature_num, ds.class_num

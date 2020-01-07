@@ -1,4 +1,3 @@
-from yaml import safe_load
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
@@ -14,17 +13,11 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 files = ['data/airlines.arff',
          'data/covtype.arff',
          'data/kddcup99.arff',
-         'data/pokerhand.arff',
-         'data/sensor.arff']
-with open('config.yml', 'r') as f:
-    conf = safe_load(f)
-epoch = conf['m_epoch']
-lr = conf['m_lr']
-m_hidden_size = conf['meta_hidden_size']
-T = conf['T']
+         'data/pokerhand.arff']
 
 
-def get_metalearner(filename):
+def get_metalearner(filename, batch_size1, batch_size2, m_hidden_size,
+                    training_size, epoch, lr, T, p):
     metalearner = MetaLearner(m_hidden_size)
     metalearner.to(device)
     metalearner.double()
@@ -35,61 +28,52 @@ def get_metalearner(filename):
             if f == filename:
                 continue
             dataloader, input_size, output_size = \
-                get_dataloader(f, False)
+                get_dataloader(f, batch_size1, training_size, False)
 
-            hidden_size = int((input_size + output_size) / 2)
-            model = BaseLearner(input_size, hidden_size, output_size)
+            model = BaseLearner(input_size, 25, output_size)
             model.load_state_dict(torch.load(f[5:]+'.pt'))
             model.double()
             model.to(device)
 
-            model_cp = BaseLearner(input_size, hidden_size, output_size)
+            model_cp = BaseLearner(input_size, 25, output_size)
             model_cp.double()
             model_cp.to(device)
 
             for batch_x, batch_y in dataloader:
                 batch_x = batch_x.to(device)
                 batch_x = batch_x.double()
+                batch_x = batch_x.view(-1, batch_size2, input_size)
                 batch_y = batch_y.to(device)
                 batch_y = batch_y.long()
-                batch_y = batch_y.view(-1)
+                batch_y = batch_y.view(-1, batch_size2)
 
                 optimizer.zero_grad()
-                for t in range(T):
-                    model_cp.load_state_dict(model.state_dict())
-                    grad, loss = get_grad(model_cp, batch_x, batch_y)
-                    hc1 = [None for i in grad]
-                    hc2 = [None for i in grad]
-                    for n, para in enumerate(model.parameters()):
-                        meta_input = preprocess(grad[n], loss)
-                        meta_input.to(device)
-                        if hc1[n] is None:
-                            hc1[n] = (torch.randn(1, meta_input.size(0),
-                                                  m_hidden_size,
-                                                  device=device,
-                                                  dtype=torch.float64),
-                                      torch.randn(1, meta_input.size(0),
-                                                  m_hidden_size,
-                                                  device=device,
-                                                  dtype=torch.float64))
-                        if hc2[n] is None:
-                            hc2[n] = (torch.randn(1, meta_input.size(0), 2,
-                                                  device=device,
-                                                  dtype=torch.float64),
-                                      torch.randn(1, meta_input.size(0), 2,
-                                                  device=device,
-                                                  dtype=torch.float64))
-                        meta_output, hc1[n], hc2[n] = \
-                            metalearner(meta_input, hc1[n], hc2[n])
+                for j in range(int(batch_size1/batch_size2)-1):
+                    for t in range(T):
+                        model_cp.load_state_dict(model.state_dict())
+                        grad, loss = get_grad(model_cp, batch_x[j], batch_y[j])
+                        hc = [None for i in grad]
+                        for n, para in enumerate(model.parameters()):
+                            meta_input = preprocess(grad[n], loss, p)
+                            meta_input.to(device)
+                            if hc[n] is None:
+                                hc[n] = (torch.randn(2, meta_input.size(0),
+                                                     m_hidden_size,
+                                                     device=device,
+                                                     dtype=torch.float64),
+                                         torch.randn(2, meta_input.size(0),
+                                                     m_hidden_size,
+                                                     device=device,
+                                                     dtype=torch.float64))
+                            meta_output, hc[n] = \
+                                metalearner(meta_input, hc[n])
 
-                        ft = meta_output[:, :, 0].reshape(para.data.size())
-                        it = meta_output[:, :, 1].reshape(para.data.size())
-                        para.data.mul_(ft)
-                        para.data.add_(it)
+                            meta_output = meta_output.view(para.data.size())
+                            para.data.sub_(meta_output)
 
-                ybar = model(batch_x)
-                t_loss = F.nll_loss(ybar, batch_y)
-                t_loss.backward()
-                optimizer.step()
+                    ybar = model(batch_x[j+1])
+                    t_loss = F.nll_loss(ybar, batch_y[j+1])
+                    t_loss.backward()
+                    optimizer.step()
 
     torch.save(metalearner.state_dict(), filename[5:]+'.meta.pt')

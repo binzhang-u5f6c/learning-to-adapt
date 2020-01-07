@@ -1,16 +1,12 @@
 from math import exp
 from math import log
 
-from yaml import safe_load
 import torch
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-with open('config.yml', 'r') as f:
-    conf = safe_load(f)
-p = conf['p']
 
 
-def preprocess(x, loss):
+def preprocess(x, loss, p):
     col1 = x.abs().log() / p
     col1[x.abs() < exp(-p)] = -1
     col2 = x.sign()

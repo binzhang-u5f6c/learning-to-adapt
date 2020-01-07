@@ -1,4 +1,3 @@
-from yaml import safe_load
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
@@ -6,19 +5,15 @@ import torch.optim as optim
 from model.baselearner import BaseLearner
 from utils.load import get_dataloader
 
-# hyperparemeters
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-with open('config.yml', 'r') as f:
-    conf = safe_load(f)
-epoch = conf['b_epoch']
-lr = conf['b_lr']
 
 
-def get_init_baselearner(filename):
-    dataloader, input_size, output_size = get_dataloader(filename)
+def get_init_baselearner(filename, batch_size, training_size, epoch, lr):
+    dataloader, input_size, output_size = get_dataloader(filename,
+                                                         batch_size,
+                                                         training_size)
 
-    hidden_size = int((input_size + output_size) / 2)
-    model = BaseLearner(input_size, hidden_size, output_size)
+    model = BaseLearner(input_size, 25, output_size)
     model.to(device)
     model.double()
     optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9)

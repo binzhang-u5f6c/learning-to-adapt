@@ -1,22 +1,21 @@
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+from train.getinitbaselearner import get_init_baselearner
+from evaluate.baseline import baseline
 
-from utils.load import DatasetFoo
-
+# hyperparameters
 files = ['data/airlines.arff',
          'data/covtype.arff',
          'data/kddcup99.arff',
          'data/pokerhand.arff',
          'data/sensor.arff']
+training_size = 100000
+batch_size1 = 1000
 
-for filename in files:
-    ds1 = DatasetFoo(filename)
-    x = ds1.x
-    y = ds1.y
-    clf = LogisticRegression()
-    clf.fit(x, y)
-    ds1 = DatasetFoo(filename, False)
-    x = ds1.x
-    y = ds1.y
-    ybar = clf.predict(x)
-    acc = accuracy_score(ybar, y)
+b_lr = 0.01
+
+for b_epoch in [200, 500, 1000, 2000, 5000, 10000]:
+    print('epoch = {}'.format(b_epoch))
+    for filename in files:
+        get_init_baselearner(filename, batch_size1,
+                             training_size, b_epoch, b_lr)
+        corr, total = baseline(filename, batch_size1, training_size)
+        print(' '+filename+': ', corr/total)
