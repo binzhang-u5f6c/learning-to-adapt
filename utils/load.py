@@ -33,11 +33,11 @@ class DatasetFoo(Dataset):
         self.y[cols[0]] = ybar.replace(replace_map)
 
         if train:
-            self.x = df.x[:split_point, :]
-            self.y = df.y[:split_point, :]
+            self.x = self.x[:split_point, :]
+            self.y = self.y[:split_point, :]
         else:
-            self.x = df.x[split_point:, :]
-            self.y = df.y[split_point:, :]
+            self.x = self.x[split_point:, :]
+            self.y = self.y[split_point:, :]
 
     def __len__(self):
         return len(self.x)
