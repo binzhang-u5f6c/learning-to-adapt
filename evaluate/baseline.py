@@ -18,7 +18,7 @@ def baseline(filename):
     total = 0
     correct = 0
     with torch.no_grad():
-        for batch_x, batch_y in enumerate(dataloader):
+        for batch_x, batch_y in dataloader:
             batch_x = batch_x.to(device)
             batch_x = batch_x.double()
             batch_y = batch_y.to(device)
