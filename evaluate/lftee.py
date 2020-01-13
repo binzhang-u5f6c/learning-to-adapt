@@ -42,7 +42,7 @@ def lftee(filename, batch_size1, batch_size2, hidden_size,
             ybar = model(batch_x[j])
             ybar = ybar.max(1)[1]
             ybar = ybar.view(-1)
-            total += batch_y.size(0)
+            total += batch_size2
             correct += (ybar == batch_y[j]).sum().item()
             for t in range(T):
                 model_cp.load_state_dict(model.state_dict())

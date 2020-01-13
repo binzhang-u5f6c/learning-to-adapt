@@ -9,7 +9,7 @@ files = ['data/airlines.arff',
          'data/kddcup99.arff',
          'data/pokerhand.arff']
 training_size = 100000
-batch_size1 = 1000
+batch_size1 = 10000
 batch_size2 = 100
 
 b_hidden_size = 5
