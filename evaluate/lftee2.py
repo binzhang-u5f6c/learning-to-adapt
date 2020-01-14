@@ -9,8 +9,8 @@ from utils.preprocess import preprocess
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def lftee(filename, batch_size1, batch_size2, hidden_size,
-          meta_hidden_size, training_size, T, p):
+def lftee2(filename, batch_size1, batch_size2, hidden_size,
+           meta_hidden_size, training_size, T, p):
     dataloader, input_size, output_size = get_dataloader(filename, batch_size1,
                                                          training_size, False)
 

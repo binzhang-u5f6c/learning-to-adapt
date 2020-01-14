@@ -1,7 +1,7 @@
 from train.getinitbaselearner import get_init_baselearner
 from train.getmetalearner import get_metalearner
 from evaluate.baseline import baseline
-from evaluate.lftee import lftee
+from evaluate.lftee1 import lftee1
 
 # hyperparameters
 files = ['data/airlines.arff',
@@ -34,15 +34,17 @@ get_init_baselearner('data/pokerhand.arff', b_hidden_size, batch_size1,
                      training_size, 200, b_lr)
 
 # baseline
+print('baseline:')
 for filename in files:
     corr, total = baseline(filename, b_hidden_size,
                            batch_size1, training_size)
     print(' '+filename+': ', corr/total)
 
 # lftee
+print('lftee:')
 for filename in files:
     get_metalearner(filename, batch_size1, batch_size2, b_hidden_size,
                     m_hidden_size, training_size, m_epoch, m_lr, T, p)
-    corr, total = lftee(filename, batch_size1, batch_size2, b_hidden_size,
-                        m_hidden_size, training_size, T, p)
+    corr, total = lftee1(filename, batch_size1, batch_size2, b_hidden_size,
+                         m_hidden_size, training_size, T, p)
     print(' '+filename+': ', corr/total)

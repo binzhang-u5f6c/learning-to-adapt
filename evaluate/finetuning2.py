@@ -7,7 +7,7 @@ from utils.load import get_dataloader
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def finetuning1(filename, batch_size1, batch_size2, hidden_size,
+def finetuning2(filename, batch_size1, batch_size2, hidden_size,
                 meta_hidden_size, training_size, T, p):
     dataloader, input_size, output_size = get_dataloader(filename, batch_size1,
                                                          training_size, False)
