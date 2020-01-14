@@ -31,7 +31,7 @@ get_init_baselearner('data/covtype.arff', b_hidden_size, batch_size1,
 get_init_baselearner('data/kddcup99.arff', b_hidden_size, batch_size1,
                      training_size, 500, b_lr)
 get_init_baselearner('data/pokerhand.arff', b_hidden_size, batch_size1,
-                     training_size, 1000, b_lr)
+                     training_size, 200, b_lr)
 
 # baseline
 for filename in files:
