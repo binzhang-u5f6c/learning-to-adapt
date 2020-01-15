@@ -26,7 +26,7 @@ def lftee2(filename, batch_size1, batch_size2, hidden_size,
     model_cp.to(device)
 
     metalearner = MetaLearner(meta_hidden_size)
-    metalearner.load_state_dict(torch.load(filename[5:]+'.meta.pt'))
+    metalearner.load_state_dict(torch.load('meta2.'+filename[5:]+'.pt'))
     metalearner.double()
     metalearner.to(device)
 

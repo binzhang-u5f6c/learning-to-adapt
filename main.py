@@ -1,7 +1,9 @@
+from time import time
+
 from train.getinitbaselearner import get_init_baselearner
-from train.getmetalearner import get_metalearner
+from train.getmetalearner2 import get_metalearner2
 from evaluate.baseline import baseline
-from evaluate.lftee1 import lftee1
+from evaluate.lftee2 import lftee2
 
 # hyperparameters
 files = ['data/airlines.arff',
@@ -43,8 +45,14 @@ for filename in files:
 # lftee
 print('lftee:')
 for filename in files:
-    get_metalearner(filename, batch_size1, batch_size2, b_hidden_size,
-                    m_hidden_size, training_size, m_epoch, m_lr, T, p)
-    corr, total = lftee1(filename, batch_size1, batch_size2, b_hidden_size,
+    t1 = time()
+    get_metalearner2(filename, batch_size1, batch_size2, b_hidden_size,
+                     m_hidden_size, training_size, m_epoch, m_lr, T, p)
+    t2 = time()
+    corr, total = lftee2(filename, batch_size1, batch_size2, b_hidden_size,
                          m_hidden_size, training_size, T, p)
-    print(' '+filename+': ', corr/total)
+    t3 = time()
+    print(' '+filename+':')
+    print('  training time: {}'.format(t2-t1))
+    print('  inference time: {}'.format(t2-t1))
+    print('  acc: {}'.format(corr/total))

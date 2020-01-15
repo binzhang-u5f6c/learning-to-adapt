@@ -16,8 +16,8 @@ files = ['data/airlines.arff',
          'data/pokerhand.arff']
 
 
-def get_metalearner(filename, batch_size1, batch_size2, hidden_size,
-                    m_hidden_size, training_size, epoch, lr, T, p):
+def get_metalearner1(filename, batch_size1, batch_size2, hidden_size,
+                     m_hidden_size, training_size, epoch, lr, T, p):
     metalearner = MetaLearner(m_hidden_size)
     metalearner.to(device)
     metalearner.double()
@@ -76,4 +76,4 @@ def get_metalearner(filename, batch_size1, batch_size2, hidden_size,
                     t_loss.backward()
                     optimizer.step()
 
-    torch.save(metalearner.state_dict(), filename[5:]+'.meta.pt')
+    torch.save(metalearner.state_dict(), 'meta1.'+filename[5:]+'.pt')
