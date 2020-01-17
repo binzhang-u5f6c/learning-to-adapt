@@ -49,8 +49,8 @@ def get_metalearner2(filename, batch_size1, batch_size2, hidden_size,
                 batch_y = batch_y.long()
                 batch_y = batch_y.view(-1, batch_size2)
 
-                optimizer.zero_grad()
                 for j in range(batch_x.size(0)-1):
+                    optimizer.zero_grad()
                     for t in range(T):
                         model_cp.load_state_dict(model.state_dict())
                         grad, loss = get_grad(model_cp, batch_x[j], batch_y[j])
@@ -60,11 +60,11 @@ def get_metalearner2(filename, batch_size1, batch_size2, hidden_size,
                                 meta_input = preprocess(grad[n], loss, p)
                                 meta_input.to(device)
                                 if hc[n] is None:
-                                    hc[n] = (torch.randn(2, meta_input.size(0),
+                                    hc[n] = (torch.zeros(2, meta_input.size(0),
                                                          m_hidden_size,
                                                          device=device,
                                                          dtype=torch.float64),
-                                             torch.randn(2, meta_input.size(0),
+                                             torch.zeros(2, meta_input.size(0),
                                                          m_hidden_size,
                                                          device=device,
                                                          dtype=torch.float64))
@@ -75,9 +75,14 @@ def get_metalearner2(filename, batch_size1, batch_size2, hidden_size,
                                     meta_output.view(para.data.size())
                                 para.data.sub_(meta_output)
 
+                    l2 = 0
+                    for para in model.parameters():
+                        l2 += (para**2).sum()
                     ybar = model(batch_x[j+1])
-                    t_loss = F.nll_loss(ybar, batch_y[j+1])
+                    t_loss = F.nll_loss(ybar, batch_y[j+1]) + l2
                     t_loss.backward()
+                    torch.nn.utils.clip_grad_value_(metalearner.parameters(),
+                                                    10)
                     optimizer.step()
 
     torch.save(metalearner.state_dict(), 'meta2.'+filename[5:]+'.pt')

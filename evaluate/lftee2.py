@@ -55,11 +55,11 @@ def lftee2(filename, batch_size1, batch_size2, hidden_size,
                         meta_input = preprocess(grad[n], loss, p)
                         meta_input.to(device)
                         if hc[n] is None:
-                            hc[n] = (torch.randn(2, meta_input.size(0),
+                            hc[n] = (torch.zeros(2, meta_input.size(0),
                                                  meta_hidden_size,
                                                  device=device,
                                                  dtype=torch.float64),
-                                     torch.randn(2, meta_input.size(0),
+                                     torch.zeros(2, meta_input.size(0),
                                                  meta_hidden_size,
                                                  device=device,
                                                  dtype=torch.float64))

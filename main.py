@@ -20,7 +20,7 @@ m_hidden_size = 5
 # b_epoch = 200
 b_lr = 0.01
 
-m_epoch = 3
+m_epoch = 10
 m_lr = 0.01
 T = 10
 p = 10
@@ -43,7 +43,6 @@ for filename in files:
     print(' '+filename+': ', corr/total)
 
 # lftee
-print('lftee:')
 for filename in files:
     t1 = time()
     get_metalearner2(filename, batch_size1, batch_size2, b_hidden_size,
