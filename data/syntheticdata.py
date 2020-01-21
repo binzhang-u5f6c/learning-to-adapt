@@ -29,6 +29,8 @@ class SyntheticDataset(Dataset):
         return self.n
 
     def __getitem__(self, idx):
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
         batch_size = len(idx)
         if self.drift:
             if self.gtype == 'agrawal':
