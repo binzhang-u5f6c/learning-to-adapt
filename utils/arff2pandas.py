@@ -16,4 +16,13 @@ def arff2pandas(filename):
         else:
             seri_dict[name] = pd.Series(d_list, dtype='category')
     df = pd.DataFrame(seri_dict)
-    return df
+    df.to_csv(filename[:-5]+'.csv')
+
+
+if __name__ == "__main__":
+    files = ['data/airlines.arff',
+             'data/covtype.arff',
+             'data/kddcup99.arff',
+             'data/pokerhand.arff']
+    for f in files:
+        arff2pandas(f)
