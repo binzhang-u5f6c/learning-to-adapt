@@ -1,3 +1,6 @@
+from random import randint
+from random import uniform
+
 import numpy as np
 import pandas as pd
 from skmultiflow.data import HyperplaneGenerator
@@ -12,7 +15,16 @@ df = pd.DataFrame(np.hstack((x, y)))
 df.to_csv('data/hyperplane.1a.csv')
 
 d = np.ones((1, 11))
+drift_flag = False
 for i in range(10000):
+    if not drift_flag:
+        rd = uniform(0, 1)
+        generator_hp.set_params(mag_change=rd)
+        x, y = generator_hp.next_sample()
+        generator_hp.set_params(mag_change=0)
+        drift_flag = True
+    else:
+        drift_flag = False
     x, y = generator_hp.next_sample(100)
     y = y.reshape((-1, 1))
     d = np.vstack((d, np.hstack((x, y))))
@@ -27,7 +39,14 @@ df = pd.DataFrame(np.hstack((x, y)))
 df.to_csv('data/sea.1a.csv')
 
 d = np.ones((1, 4))
+drift_flag = False
 for i in range(10000):
+    if not drift_flag:
+        rd = randint(0, 3)
+        generator_sea.set_params(classification_function=rd)
+        drift_flag = True
+    else:
+        drift_flag = False
     x, y = generator_sea.next_sample(100)
     y = y.reshape((-1, 1))
     d = np.vstack((d, np.hstack((x, y))))
@@ -43,7 +62,16 @@ df = pd.DataFrame(np.hstack((x, y)))
 df.to_csv('data/hyperplane.2a.csv')
 
 d = np.ones((1, 11))
+drift_flag = False
 for i in range(10000):
+    if not drift_flag:
+        rd = uniform(0, 1)
+        generator_hp.set_params(mag_change=rd)
+        x, y = generator_hp.next_sample()
+        generator_hp.set_params(mag_change=0)
+        drift_flag = True
+    else:
+        drift_flag = False
     x, y = generator_hp.next_sample(100)
     y = y.reshape((-1, 1))
     d = np.vstack((d, np.hstack((x, y))))
@@ -58,7 +86,14 @@ df = pd.DataFrame(np.hstack((x, y)))
 df.to_csv('data/sea.2a.csv')
 
 d = np.ones((1, 4))
+drift_flag = False
 for i in range(10000):
+    if not drift_flag:
+        rd = randint(0, 3)
+        generator_sea.set_params(classification_function=rd)
+        drift_flag = True
+    else:
+        drift_flag = False
     x, y = generator_sea.next_sample(100)
     y = y.reshape((-1, 1))
     d = np.vstack((d, np.hstack((x, y))))
