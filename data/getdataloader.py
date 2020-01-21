@@ -34,7 +34,7 @@ class Hyperplane1A(Dataset):
 def get_hyperplane1a(batch_size):
     ds = Hyperplane1A()
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                    num_workers=8, pin_memory=True)
+                    num_workers=8, pin_memory=True, drop_last=True)
     return dl
 
 
@@ -68,7 +68,7 @@ class Hyperplane1B(Dataset):
 def get_hyperplane1b(batch_size):
     ds = Hyperplane1B()
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                    num_workers=8, pin_memory=True)
+                    num_workers=8, pin_memory=True, drop_last=True)
     return dl
 
 
@@ -102,7 +102,7 @@ class Sea1A(Dataset):
 def get_sea1a(batch_size):
     ds = Sea1A()
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                    num_workers=8, pin_memory=True)
+                    num_workers=8, pin_memory=True, drop_last=True)
     return dl
 
 
@@ -136,7 +136,7 @@ class Sea1B(Dataset):
 def get_sea1b(batch_size):
     ds = Sea1B()
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                    num_workers=8, pin_memory=True)
+                    num_workers=8, pin_memory=True, drop_last=True)
     return dl
 
 
@@ -170,7 +170,7 @@ class Hyperplane2A(Dataset):
 def get_hyperplane2a(batch_size):
     ds = Hyperplane2A()
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                    num_workers=8, pin_memory=True)
+                    num_workers=8, pin_memory=True, drop_last=True)
     return dl
 
 
@@ -204,7 +204,7 @@ class Hyperplane2B(Dataset):
 def get_hyperplane2b(batch_size):
     ds = Hyperplane2B()
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                    num_workers=8, pin_memory=True)
+                    num_workers=8, pin_memory=True, drop_last=True)
     return dl
 
 
@@ -238,7 +238,7 @@ class Sea2A(Dataset):
 def get_sea2a(batch_size):
     ds = Sea2A()
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                    num_workers=8, pin_memory=True)
+                    num_workers=8, pin_memory=True, drop_last=True)
     return dl
 
 
@@ -272,5 +272,5 @@ class Sea2B(Dataset):
 def get_sea2b(batch_size):
     ds = Sea2B()
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                    num_workers=8, pin_memory=True)
+                    num_workers=8, pin_memory=True, drop_last=True)
     return dl

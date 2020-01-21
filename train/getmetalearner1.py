@@ -84,7 +84,7 @@ for e in range(epoch):
     for x, y in dl2:
         x = x.to(device)
         x = x.double()
-        x = x.view(-1, batch_size2, 10)
+        x = x.view(-1, batch_size2, 3)
         y = y.to(device)
         y = y.long()
         y = y.view(-1, batch_size2)
