@@ -18,7 +18,7 @@ model = BaseLearner1(10, 5, 2)
 model.to(device)
 model.double()
 optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
-for e in range(epoch):
+for e in range(100):
     for x, y in dl:
         x = x.to(device)
         x = x.double()

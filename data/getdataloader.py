@@ -7,7 +7,9 @@ from torch.utils.data import DataLoader
 class Hyperplane1A(Dataset):
     def __init__(self):
         super(Hyperplane1A).__init__()
-        df = pd.read_csv('data/hyperplane.1a.csv')
+        df = pd.read_csv('data/hyperplane.1a.csv',
+                         header=0,
+                         usecols=list(range(1, 12)))
         self.x = df.iloc[:, :-1]
         self.y = df.iloc[:, -1:]
 
@@ -39,7 +41,9 @@ def get_hyperplane1a(batch_size):
 class Hyperplane1B(Dataset):
     def __init__(self):
         super(Hyperplane1B).__init__()
-        df = pd.read_csv('data/hyperplane.1b.csv')
+        df = pd.read_csv('data/hyperplane.1b.csv',
+                         header=0,
+                         usecols=list(range(1, 12)))
         self.x = df.iloc[:, :-1]
         self.y = df.iloc[:, -1:]
 
@@ -71,7 +75,9 @@ def get_hyperplane1b(batch_size):
 class Sea1A(Dataset):
     def __init__(self):
         super(Sea1A).__init__()
-        df = pd.read_csv('data/sea.1a.csv')
+        df = pd.read_csv('data/sea.1a.csv',
+                         header=0,
+                         usecols=list(range(1, 5)))
         self.x = df.iloc[:, :-1]
         self.y = df.iloc[:, -1:]
 
@@ -103,7 +109,9 @@ def get_sea1a(batch_size):
 class Sea1B(Dataset):
     def __init__(self):
         super(Sea1A).__init__()
-        df = pd.read_csv('data/sea.1b.csv')
+        df = pd.read_csv('data/sea.1b.csv',
+                         header=0,
+                         usecols=list(range(1, 5)))
         self.x = df.iloc[:, :-1]
         self.y = df.iloc[:, -1:]
 
@@ -135,7 +143,9 @@ def get_sea1b(batch_size):
 class Hyperplane2A(Dataset):
     def __init__(self):
         super(Hyperplane2A).__init__()
-        df = pd.read_csv('data/hyperplane.2a.csv')
+        df = pd.read_csv('data/hyperplane.2a.csv',
+                         header=0,
+                         usecols=list(range(1, 12)))
         self.x = df.iloc[:, :-1]
         self.y = df.iloc[:, -1:]
 
@@ -167,7 +177,9 @@ def get_hyperplane2a(batch_size):
 class Hyperplane2B(Dataset):
     def __init__(self):
         super(Hyperplane2B).__init__()
-        df = pd.read_csv('data/hyperplane.2b.csv')
+        df = pd.read_csv('data/hyperplane.2b.csv',
+                         header=0,
+                         usecols=list(range(1, 12)))
         self.x = df.iloc[:, :-1]
         self.y = df.iloc[:, -1:]
 
@@ -199,7 +211,9 @@ def get_hyperplane2b(batch_size):
 class Sea2A(Dataset):
     def __init__(self):
         super(Sea2A).__init__()
-        df = pd.read_csv('data/sea.2a.csv')
+        df = pd.read_csv('data/sea.2a.csv',
+                         header=0,
+                         usecols=list(range(1, 5)))
         self.x = df.iloc[:, :-1]
         self.y = df.iloc[:, -1:]
 
@@ -231,7 +245,9 @@ def get_sea2a(batch_size):
 class Sea2B(Dataset):
     def __init__(self):
         super(Sea2B).__init__()
-        df = pd.read_csv('data/sea.2b.csv')
+        df = pd.read_csv('data/sea.2b.csv',
+                         header=0,
+                         usecols=list(range(1, 5)))
         self.x = df.iloc[:, :-1]
         self.y = df.iloc[:, -1:]
 

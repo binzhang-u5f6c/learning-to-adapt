@@ -54,7 +54,7 @@ df = pd.DataFrame(d)
 df.to_csv('data/sea.1b.csv')
 
 # generate data stream for evaluating meta model
-generator_hp = HyperplaneGenerator(random_state=1)
+generator_hp = HyperplaneGenerator(random_state=65535)
 generator_hp.prepare_for_use()
 x, y = generator_hp.next_sample(10000)
 y = y.reshape((-1, 1))
@@ -78,7 +78,7 @@ for i in range(10000):
 df = pd.DataFrame(d)
 df.to_csv('data/hyperplane.2b.csv')
 
-generator_sea = SEAGenerator(random_state=1)
+generator_sea = SEAGenerator(random_state=65535)
 generator_sea.prepare_for_use()
 x, y = generator_sea.next_sample(10000)
 y = y.reshape((-1, 1))
