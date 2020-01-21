@@ -53,9 +53,9 @@ class SyntheticDataset(Dataset):
             self.generator.set_params(mag_change=0)
         x_eval, y_eval = self.generator.next_sample()
 
-        x_ft = torch.from_numpy(x_ft)
+        x_ft = torch.from_numpy(x_ft[0])
         y_ft = torch.from_numpy(y_ft)
-        x_eval = torch.from_numpy(x_eval)
+        x_eval = torch.from_numpy(x_eval[0])
         y_eval = torch.from_numpy(y_eval)
         return x_ft, y_ft, x_eval, y_eval
 
