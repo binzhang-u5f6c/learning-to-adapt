@@ -1,44 +1,73 @@
 import torch
 import torch.nn.functional as F
 
-from model.baselearner import BaseLearner
-from utils.load import get_dataloader
+from model.baselearner import BaseLearner1
+from data.getdataloader import get_hyperplane2b
+from data.getdataloader import get_sea2b
 
+batch_size1 = 2000
+batch_size2 = 100
+T = 10
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def finetuning1(filename, batch_size1, batch_size2, hidden_size,
-                meta_hidden_size, training_size, T, p):
-    dataloader, input_size, output_size = get_dataloader(filename, batch_size1,
-                                                         training_size, False)
-
-    model = BaseLearner(input_size, hidden_size, output_size)
-    model.load_state_dict(torch.load(filename[5:]+'.pt'))
+def finetuning1():
+    dl = get_hyperplane2b(batch_size1)
+    model = BaseLearner1(10, 5, 2)
+    model.load_state_dict(torch.load('data/hp2.pt'))
     model.double()
     model.to(device)
 
-    total = 0
-    correct = 0
-    for batch_x, batch_y in dataloader:
-        batch_x = batch_x.to(device)
-        batch_x = batch_x.double()
-        batch_x = batch_x.view(-1, batch_size2, input_size)
-        batch_y = batch_y.to(device)
-        batch_y = batch_y.long()
-        batch_y = batch_y.view(-1, batch_size2)
+    total, corr = 0, 0
+    for x, y in dl:
+        x = x.to(device)
+        x = x.double()
+        x = x.view(-1, batch_size2, 10)
+        y = y.to(device)
+        y = y.long()
+        y = y.view(-1, batch_size2)
 
-        for j in range(batch_x.size(0)):
-            ybar = model(batch_x[j])
+        for j in range(x.size(0)):
+            ybar = model(x[j])
             ybar = ybar.max(1)[1]
             ybar = ybar.view(-1)
             total += batch_size2
-            correct += (ybar == batch_y[j]).sum().item()
+            corr += (ybar == y[j]).sum().item()
             for t in range(T):
                 model.zero_grad()
-                ybar = model(batch_x[j])
-                loss = F.nll_loss(ybar, batch_y[j])
+                ybar = model(x[j])
+                loss = F.nll_loss(ybar, y[j])
                 loss.backward()
                 for para in model.parameters():
-                    para.data.sub_(para.grad.data * 0.01)
+                    para.data.sub_(para.grad.data*0.01)
+    print('hyperplane acc:{:.2f}%'.format(corr/total*100))
 
-    return correct, total
+    dl = get_sea2b(batch_size1)
+    model = BaseLearner1(3, 5, 2)
+    model.load_state_dict(torch.load('data/sea2.pt'))
+    model.double()
+    model.to(device)
+
+    total, corr = 0, 0
+    for x, y in dl:
+        x = x.to(device)
+        x = x.double()
+        x = x.view(-1, batch_size2, 3)
+        y = y.to(device)
+        y = y.long()
+        y = y.view(-1, batch_size2)
+
+        for j in range(x.size(0)):
+            ybar = model(x[j])
+            ybar = ybar.max(1)[1]
+            ybar = ybar.view(-1)
+            total += batch_size2
+            corr += (ybar == y[j]).sum().item()
+            for t in range(T):
+                model.zero_grad()
+                ybar = model(x[j])
+                loss = F.nll_loss(ybar, y[j])
+                loss.backward()
+                for para in model.parameters():
+                    para.data.sub_(para.grad.data*0.01)
+    print('sea acc:{:.2f}%'.format(corr/total*100))

@@ -10,7 +10,7 @@ from utils.getgrad import get_grad
 from utils.preprocess import preprocess
 
 batch_size1 = 2000
-batch_size2 = 100
+batch_size2 = 200
 epoch = 10
 T = 10
 p = 10
@@ -47,7 +47,7 @@ for e in range(epoch):
             optimizer.zero_grad()
             for t in range(T):
                 model_cp.load_state_dict(model.state_dict())
-                grad, loss = get_grad(model_cp, x[j][:50], y[j][:50])
+                grad, loss = get_grad(model_cp, x[j][:100], y[j][:100])
                 hc = [None for i in grad]
                 for n, para in enumerate(model.parameters()):
                     meta_input = preprocess(grad[n], loss, p)
@@ -66,8 +66,8 @@ for e in range(epoch):
             l2 = 0
             for para in model.parameters():
                 l2 += (para**2).sum()
-            ybar = model(x[j][50:])
-            t_loss = F.nll_loss(ybar, y[j][50:]) + l2
+            ybar = model(x[j][100:])
+            t_loss = F.nll_loss(ybar, y[j][100:]) + l2
             t_loss.backward()
             torch.nn.utils.clip_grad_value_(metalearner.parameters(), 10)
             optimizer.step()
@@ -118,4 +118,4 @@ for e in range(epoch):
             torch.nn.utils.clip_grad_value_(metalearner.parameters(), 10)
             optimizer.step()
 
-torch.save(metalearner.state_dict(), 'meta.pt')
+torch.save(metalearner.state_dict(), 'model/meta.pt')
