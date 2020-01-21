@@ -16,7 +16,17 @@ def arff2pandas(filename):
         else:
             seri_dict[name] = pd.Series(d_list, dtype='category')
     df = pd.DataFrame(seri_dict)
-    df.to_csv(filename[:-5]+'.csv')
+
+    x = df.iloc[:, :-1]
+    y = df.iloc[:, -1:]
+
+    x = pd.get_dummies(x)
+    cols = y.keys()
+    ybar = y.pop(cols[0])
+    classes = pd.unique(ybar)
+    replace_map = {k: i for i, k in enumerate(classes)}
+    x[cols[0]] = ybar.replace(replace_map)
+    x.to_csv(filename[:-5]+'.csv')
 
 
 if __name__ == "__main__":
