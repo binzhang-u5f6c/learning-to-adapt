@@ -27,7 +27,7 @@ dl2 = get_sea1b(batch_size1)
 
 for e in range(epoch):
     model = BaseLearner1(10, 5, 2)
-    model.load_state_dict(torch.load('data/hp1.pt'))
+    model.load_state_dict(torch.load('model/hp1.pt'))
     model.double()
     model.to(device)
 
@@ -73,7 +73,7 @@ for e in range(epoch):
             optimizer.step()
 
     model = BaseLearner1(3, 5, 2)
-    model.load_state_dict(torch.load('data/sea1.pt'))
+    model.load_state_dict(torch.load('model/sea1.pt'))
     model.double()
     model.to(device)
 
