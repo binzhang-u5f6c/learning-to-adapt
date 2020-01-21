@@ -29,9 +29,6 @@ class SyntheticDataset(Dataset):
         return self.n
 
     def __getitem__(self, idx):
-        if torch.is_tensor(idx):
-            idx = idx.tolist()
-        batch_size = len(idx)
         if self.drift:
             if self.gtype == 'agrawal':
                 rd = randint(0, 9)
@@ -51,10 +48,10 @@ class SyntheticDataset(Dataset):
                 rd = randint(0, 3)
                 self.generator.set_params(classification_function=rd)
 
-        x_ft, y_ft = self.generator.next_sample(batch_size)
+        x_ft, y_ft = self.generator.next_sample()
         if self.gtype == 'hyperplane1':
             self.generator.set_params(mag_change=0)
-        x_eval, y_eval = self.generator.next_sample(batch_size)
+        x_eval, y_eval = self.generator.next_sample()
 
         x_ft = torch.from_numpy(x_ft)
         y_ft = torch.from_numpy(y_ft)
